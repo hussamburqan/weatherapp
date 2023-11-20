@@ -1,28 +1,22 @@
-import 'package:flutter/material.dart';
-
 class WeatherData {
-  String name,country,icon;
+  final double temperatureC;
+  final double temperatureF;
+  final String condition;
+  final String icon;
+
 
   WeatherData({
-      required this.name,
-      required this.country,
-      required this.icon
+    required this.temperatureC,
+    required this.temperatureF,
+    required this.condition,
+    required this.icon,
   });
 
 
-Map<String, dynamic> toJson(){
-    return{
-      "name": this.name,
-      "country": this.country,
-      "icon": this.icon,
-    };
-}
-
-factory WeatherData.fromJson(Map<String, dynamic> json){
-  return WeatherData(
-      name: json['name'],
-      country: json['country'],
-      icon: json['icon']
-  );
-}
+  factory WeatherData.fromJson(Map<String, dynamic> json) {
+    return WeatherData(
+      icon: json ['current']['condition']['icon'],
+      temperatureC: json['current']['temp_c'],
+      temperatureF: json['current']['temp_f'],
+      condition: json['current']['condition']['text'],);}
 }
