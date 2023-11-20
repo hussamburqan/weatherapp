@@ -36,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
               Text('${widget.tempf}°F',style: TextStyle(fontSize: 50)),
               Text(widget.condi,style: TextStyle(fontSize: 50)),
               Image.network(widget.icon),
-              Text('Back in 12:10',style: TextStyle(fontSize: 50))
             ],
           )
       ),

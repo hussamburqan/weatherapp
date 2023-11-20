@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Data/Weather Data.dart';
+import 'Screens/Drawer_Home.dart';
 import 'service/WeatherService.dart';
 import 'Screens/HomeScreen.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   WeatherService weatherService = WeatherService();
   WeatherData? weather ;
-  String place1 = 'palestine';
+  String place1 = 'London';
 
   @override
   void initState() {
@@ -29,10 +30,10 @@ class _MyAppState extends State<MyApp> {
 
   void getWeather() async{
     try {
-      weather = await weatherService.getWeatherData(place1);
-    } catch (e) {
-      print('Error fetching weather data: $e');
-    }
+  weather = await weatherService.getWeatherData(place1);
+    }catch(e){
+      throw(e);
+}
   }
 
   @override
@@ -40,13 +41,25 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        drawer: DrawerHome(),
         appBar: AppBar(
+          leading: Builder(builder: (context) => IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.white,
+                size: 40,
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer()
+          )),
           centerTitle: true,
           title: const Text('Weather App'),
         ),
-        body: weather == null
-            ?Center(child: CircularProgressIndicator())
-            :HomeScreen(condi: weather!.condition,tempc: weather!.temperatureC,tempf: weather!.temperatureF, city: place1,icon: weather!.icon,)),
+        body: GestureDetector(
+
+          child: weather == null
+              ?const Center(child: CircularProgressIndicator())
+              :HomeScreen(condi: weather!.condition,tempc: weather!.temperatureC,tempf: weather!.temperatureF, city: place1,icon: weather!.icon,),
+        )),
       );
   }
 }
