@@ -19,7 +19,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   WeatherService weatherService = WeatherService();
   WeatherData? weather ;
-  String place1 = 'London';
+  String place1 = 'palestine';
 
   @override
   void initState() {

@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 140),
               Text(widget.city,style: TextStyle(fontSize: 50)),
               Text('${widget.tempc}°C',style: TextStyle(fontSize: 50)),
-              Text('${widget.tempc}°F',style: TextStyle(fontSize: 50)),
+              Text('${widget.tempf}°F',style: TextStyle(fontSize: 50)),
               Text(widget.condi,style: TextStyle(fontSize: 50)),
               Image.network(widget.icon),
               Text('Back in 12:10',style: TextStyle(fontSize: 50))
