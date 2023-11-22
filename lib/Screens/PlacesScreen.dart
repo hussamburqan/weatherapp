@@ -29,7 +29,7 @@ class _PlacesScreenState extends State<PlacesScreen> {
   Future<void> getWeather(City city) async {
     try {
 
-      await Future.delayed(Duration(milliseconds: 250));
+      await Future.delayed(const Duration(milliseconds: 100));
 
       weather = await weatherService.getWeatherData(city.city, state1);
 
@@ -43,7 +43,9 @@ class _PlacesScreenState extends State<PlacesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF8E95F5),
       appBar: AppBar(
+        backgroundColor: Color(0xFF8E95F5),
         elevation: 0,
         title: const Text('Select City'),
       ),
@@ -56,33 +58,46 @@ class _PlacesScreenState extends State<PlacesScreen> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return GestureDetector(
-                    onTap: () {
-                  widget.onPlaceSelected(city.city);
-                  widget.onPageSelected(1);
-                },
-              child:Card(
-                  child: SizedBox(
-                    height: 70,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Align(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(city.city),
-                              Text('${city.tempc}'),
-                              Text('${city.condition}'),
-                            ],
+                  onTap: () {
+                    widget.onPlaceSelected(city.city);
+                    widget.onPageSelected(0);
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)
+                    ),
+                    child: SizedBox(
+                      height: 70,
+                      child: Row(
+                        children: [
+
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 12.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(city.city,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                  Text('${city.tempc}°C'),
+                                  Text(city.condition),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                        Image.asset('assets/icon.png'),
-                      ],
+
+                          Image.asset(
+                            'assets/${city.condition}.png',
+                            width: 80,
+                            height: 80,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ));
+                );
               } else {
-                return SizedBox(
+                return const SizedBox(
                   height: 70,
                   child: Center(
                     child: CircularProgressIndicator(),
@@ -96,4 +111,3 @@ class _PlacesScreenState extends State<PlacesScreen> {
     );
   }
 }
-

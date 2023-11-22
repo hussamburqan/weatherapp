@@ -1,26 +1,30 @@
 class WeatherData {
   final double temperatureC;
-  final double temperatureF;
+  final int humidity;
+  final double wind;
   final String condition;
-  final String icon;
+  final String country;
   final String time;
 
 
-  WeatherData(  {
-    required this.icon,
+  WeatherData({
+    required this.wind,
+    required this.humidity,
     required this.time,
     required this.temperatureC,
-    required this.temperatureF,
     required this.condition,
-   // required this.icon,
+    required this.country,
   });
 
 
   factory WeatherData.fromJson(Map<String, dynamic> json) {
     return WeatherData(
-      time: json ['location']['localtime'],
-      icon: json ['current']['condition']['icon'],
-      temperatureC: json['current']['temp_c'],
-      temperatureF: json['current']['temp_f'],
-      condition: json['current']['condition']['text']);}
+        humidity: json['current']['humidity'],
+        wind: json['current']['wind_kph'],
+        country: json ['location']['country'],
+        time: json ['location']['localtime'],
+        temperatureC: json['current']['temp_c'],
+        condition: json['current']['condition']['text']);
+  }
+
 }

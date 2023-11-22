@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../Data/City Data.dart';
-import '../Mains/Second main.dart';
-import 'PlacesScreen.dart';
 
 class DrawerHome extends StatefulWidget {
 
@@ -23,32 +21,81 @@ class _DrawerHomeState extends State<DrawerHome> {
     return Drawer(
       child: Column(
         children: [
-          SizedBox(height: 120),
-          //logo
-          //DrawerHeader(child: Image.asset('')),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: ListTile(
-              leading: Icon(Icons.flag),
-              title: Text('Home',style: TextStyle(color: Colors.cyan),),
-              onTap: () {
-                setState(() {
-                  widget.onPageSelected(1);
 
-                });
-              },
+          //logo
+          DrawerHeader(padding: EdgeInsets.all(10),
+              child: Image.asset('assets/icon.png')),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0 ,right: 10.0),
+            child: Container(
+                decoration: BoxDecoration(color: const Color(0xFF8E95F5),borderRadius: BorderRadius.circular(10)),
+                height: 55,
+                child: ListTile(
+                  leading: const Icon(Icons.home),
+                  title: const Text('Home',style: TextStyle(color: Color(0xFFFFFFFF)),),
+
+                  onTap: () {
+                    setState(() {
+                      widget.onPageSelected(0);
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0,top: 10,right: 10),
+            child: Container(
+              decoration: BoxDecoration(color: const Color(0xFF8E95F5), borderRadius: BorderRadius.circular(10)),
+              height: 55,
+              child: ListTile(
+                leading: const Icon(Icons.flag),
+                title: const Text('Place',style: TextStyle(color: Color(0xFFFFFFFF)),),
+
+                onTap: () {
+                  setState(() {
+                    widget.onPageSelected(1);
+                    Navigator.pop(context);
+                  });
+                },
+              ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: ListTile(
-              leading: Icon(Icons.flag),
-              title: Text('Place',style: TextStyle(color: Colors.cyan),),
-              onTap: () {
-                setState(() {
-                  widget.onPageSelected(2);
-                });
-              },
+            padding: const EdgeInsets.only(left: 10.0 ,top: 10,right: 10.0),
+            child: Container(
+              decoration: BoxDecoration(color: const Color(0xFF8E95F5),borderRadius: BorderRadius.circular(10)),
+              height: 55,
+              child: ListTile(
+                leading: const Icon(Icons.calendar_month),
+                title: const Text('Daily Weather',style: TextStyle(color: Color(0xFFFFFFFF)),),
+
+                onTap: () {
+                  setState(() {
+                    widget.onPageSelected(2);
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0 ,top: 10,right: 10.0),
+            child: Container(
+              decoration: BoxDecoration(color: const Color(0xFF8E95F5),borderRadius: BorderRadius.circular(10)),
+              height: 55,
+              child: ListTile(
+                leading: const Icon(Icons.timer),
+                title: const Text('Hourly Weather',style: TextStyle(color: Color(0xFFFFFFFF)),),
+
+                onTap: () {
+                  setState(() {
+                    widget.onPageSelected(3);
+                    Navigator.pop(context);
+                  });
+                },
+              ),
             ),
           ),
         ],

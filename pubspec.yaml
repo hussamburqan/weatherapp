@@ -41,6 +41,7 @@ dependencies:
   connectivity_plus: ^4.0.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  google_nav_bar: ^5.0.6
 
 
 
@@ -78,11 +79,18 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/no_internet.png
+    - assets/icon.png
     - assets/Partly cloudy.png
     - assets/Overcast.png
     - assets/Clear.png
-    - assets/icon.png
-
+    - assets/Sunny.png
+    - assets/Light rain.png
+    - assets/Mist.png
+    - assets/Moderate rain.png
+    - assets/Cold.png
+    - assets/Hot.png
+    - assets/Humidity.png
+    - assets/WindSpeed.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:wather_app/Screens/PlacesScreen.dart';
 import '../Data/Weather Data.dart';
+import '../Screens/DailyScreen.dart';
 import '../Screens/Drawer_Home.dart';
+import '../Screens/HoursScreen.dart';
 import '../service/WeatherService.dart';
 import '../Screens/HomeScreen.dart';
 
@@ -19,12 +21,12 @@ class _SecondMain extends State<SecondMain> {
   WeatherData? weather;
   String state1 = 'current.json';
   late String place1;
-  int _numberScreen = 1;
+
+  int _numberScreen = 0;
 
   final _mybox = Hive.box('mybox');
 
   void _onPageSelected(int num) {
-
     setState(() {
       _numberScreen = num;
     });
@@ -36,7 +38,6 @@ class _SecondMain extends State<SecondMain> {
     getWeather();
     place1 = _mybox.get(1, defaultValue: 'London');
   }
-
 
   Future<void> getWeather() async {
     try {
@@ -51,9 +52,12 @@ class _SecondMain extends State<SecondMain> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Color(0xFF060720),
+        backgroundColor: const Color(0xFF8E95F5),
         drawer: DrawerHome(onPageSelected: _onPageSelected),
-        appBar: AppBar(backgroundColor: Color(0xFF0391AB),
+
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: const Color(0xFF8E95F5),
           leading: Builder(builder: (context) => IconButton(
             icon: const Icon(
               Icons.menu,
@@ -63,8 +67,8 @@ class _SecondMain extends State<SecondMain> {
             onPressed: () => Scaffold.of(context).openDrawer(),
           )),
           centerTitle: true,
-          title: const Text('Weather App'),
         ),
+
         body: StreamBuilder(
           stream: Connectivity().onConnectivityChanged,
           initialData: ConnectivityResult.none,
@@ -79,22 +83,30 @@ class _SecondMain extends State<SecondMain> {
                       if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       }
-                      if (weather != null && _numberScreen == 1) {
+                      if (weather != null && _numberScreen == 0) {
                         return HomeScreen(
                           condi: weather!.condition,
                           tempc: weather!.temperatureC,
-                          tempf: weather!.temperatureF,
+                          country: weather!.country,
+                          humidity: weather!.humidity,
+                          wind: weather!.wind,
                           city: place1,
                           time: weather!.time,
                         );
-                      } else if (_numberScreen == 2) {
-                        return PlacesScreen(onPlaceSelected: (selectedPlace) {
+                      } else if (_numberScreen == 1) {
+                        return PlacesScreen(onPageSelected: (p0) {_onPageSelected(0);},onPlaceSelected: (selectedPlace) {
                           setState(() {
                             place1 = selectedPlace;
                             _mybox.put(1, place1);
                           });
-                        }, onPageSelected:_onPageSelected);
-                      } else {
+                        });
+                      } else if (_numberScreen == 2){
+                        return DailyScreen();
+
+                      }else if(_numberScreen == 3){
+                        return HoursScreen();
+
+                      }else {
                         return const Center(child: Text('Weather data is null.'));
                       }
                     } else {
