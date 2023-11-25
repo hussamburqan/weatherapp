@@ -91,6 +91,14 @@ flutter:
     - assets/Hot.png
     - assets/Humidity.png
     - assets/WindSpeed.png
+    - assets/Light rain shower.png
+    - assets/Cloudy.png
+    - assets/Patchy light rain with thunder.png
+    - assets/Fog.png
+    - assets/Patchy sleet possible.png
+    - assets/Patchy rain possible.png
+    - assets/background.jpg
+    - assets/background.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

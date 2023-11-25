@@ -2,7 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:wather_app/Screens/PlacesScreen.dart';
-import '../Data/Weather Data.dart';
+import '../Model/Weather Data.dart';
 import '../Screens/DailyScreen.dart';
 import '../Screens/Drawer_Home.dart';
 import '../Screens/HoursScreen.dart';
@@ -19,8 +19,8 @@ class SecondMain extends StatefulWidget {
 class _SecondMain extends State<SecondMain> {
   WeatherService weatherService = WeatherService();
   WeatherData? weather;
-  String state1 = 'current.json';
-  late String place1;
+  String state = 'current.json';
+  late String place;
 
   int _numberScreen = 0;
 
@@ -36,14 +36,16 @@ class _SecondMain extends State<SecondMain> {
   void initState() {
     super.initState();
     getWeather();
-    place1 = _mybox.get(1, defaultValue: 'London');
+
+    place = _mybox.get(1) ?? 'London';
   }
 
   Future<void> getWeather() async {
     try {
-      weather = await weatherService.getWeatherData(place1, state1);
+      weather = (await weatherService.getWeatherData(place, state));
     } catch (e) {
-      print('Error fetching weather data: $e');
+        print('Error fetching weather data: $e');
+
     }
   }
 
@@ -52,16 +54,31 @@ class _SecondMain extends State<SecondMain> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: const Color(0xFF8E95F5),
+        backgroundColor: Colors.transparent,
         drawer: DrawerHome(onPageSelected: _onPageSelected),
-
         appBar: AppBar(
-          elevation: 0,
-          backgroundColor: const Color(0xFF8E95F5),
+
+          title: Text(
+            _numberScreen == 0
+              ? 'Weather App'
+              : _numberScreen == 1
+              ? 'Places'
+              : _numberScreen == 2
+              ? '$place daily weather'
+              : _numberScreen == 3
+              ? '$place weather hours '
+              : 'Lol',
+
+          style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Color(
+              0xFFFFFFFF)),
+          ),
+
+          elevation: 6,
+          backgroundColor: const Color(0xFF060D18),
           leading: Builder(builder: (context) => IconButton(
             icon: const Icon(
               Icons.menu,
-              color: Colors.white,
+              color: Color(0xFFFFFFFF),
               size: 40,
             ),
             onPressed: () => Scaffold.of(context).openDrawer(),
@@ -69,60 +86,63 @@ class _SecondMain extends State<SecondMain> {
           centerTitle: true,
         ),
 
-        body: StreamBuilder(
-          stream: Connectivity().onConnectivityChanged,
-          initialData: ConnectivityResult.none,
-          builder: (context, AsyncSnapshot<ConnectivityResult> snapshot) {
-            if (snapshot.hasData) {
-              ConnectivityResult result = snapshot.data!;
-              if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi) {
-                return FutureBuilder(
-                  future: getWeather(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      }
-                      if (weather != null && _numberScreen == 0) {
-                        return HomeScreen(
-                          condi: weather!.condition,
-                          tempc: weather!.temperatureC,
-                          country: weather!.country,
-                          humidity: weather!.humidity,
-                          wind: weather!.wind,
-                          city: place1,
-                          time: weather!.time,
-                        );
-                      } else if (_numberScreen == 1) {
-                        return PlacesScreen(onPageSelected: (p0) {_onPageSelected(0);},onPlaceSelected: (selectedPlace) {
-                          setState(() {
-                            place1 = selectedPlace;
-                            _mybox.put(1, place1);
-                          });
-                        });
-                      } else if (_numberScreen == 2){
-                        return DailyScreen();
+        body: Container(
+          decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/background.jpg'),fit: BoxFit.fill)),
+          child: StreamBuilder(
+              stream: Connectivity().onConnectivityChanged,
+              initialData: ConnectivityResult.none,
+              builder: (context, AsyncSnapshot<ConnectivityResult> snapshot) {
+                if (snapshot.hasData) {
+                  ConnectivityResult result = snapshot.data!;
+                  if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi) {
+                    return FutureBuilder(
+                      future: getWeather(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasError) {
+                            return Center(child: Text('Error: ${snapshot.error}'));
+                          }
+                          if (weather != null && _numberScreen == 0) {
+                            return HomeScreen(
+                              condi: weather!.condition,
+                              tempc: weather!.temperatureC,
+                              country: weather!.country,
+                              humidity: weather!.humidity,
+                              wind: weather!.wind,
+                              city: place,
+                              time: weather!.time,
+                            );
+                          } else if (_numberScreen == 1) {
+                            return PlacesScreen(onPageSelected: (p0) {_onPageSelected(0);},onPlaceSelected: (selectedPlace) {
+                              setState(() {
+                                place = selectedPlace;
+                                _mybox.put(1, place);
+                              });
+                            });
+                          } else if (_numberScreen == 2){
+                            return DailyScreen(city: place);
 
-                      }else if(_numberScreen == 3){
-                        return HoursScreen();
+                          }else if(_numberScreen == 3){
+                            return HoursScreen(city: place);
 
-                      }else {
-                        return const Center(child: Text('Weather data is null.'));
-                      }
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                  },
-                );
-              } else {
-                return noInternet();
-              }
-            } else {
-              return loading();
-            }
-          },
+                          }else {
+                            return const Center(child: Text('Weather data is null.'));
+                          }
+                        } else {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      },
+                    );
+                  } else {
+                    return noInternet();
+                  }
+                } else {
+                  return loading();
+                }
+              },
+            ),
         ),
-      ),
+        ),
     );
   }
 
@@ -133,7 +153,6 @@ class _SecondMain extends State<SecondMain> {
   Widget loading() {
     return const Center(
       child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
       ),
     );
   }
@@ -158,16 +177,7 @@ class _SecondMain extends State<SecondMain> {
           ),
           Container(
             margin: const EdgeInsets.only(bottom: 20),
-            child: const Text("Check your connection, then refresh the page."),
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.green),
-            ),
-            onPressed: () async {
-              ConnectivityResult result = await Connectivity().checkConnectivity();
-            },
-            child: const Text("Refresh"),
+            child: const Text("Check your connection"),
           ),
         ],
       ),

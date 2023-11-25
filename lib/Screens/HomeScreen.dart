@@ -28,65 +28,79 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  Future<void> refresh() async {
+    return await Future.delayed(const Duration(seconds: 2));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-          child: Column(
-            children: [
+    return  Column(
+              children: [
 
-              Padding(
-                padding: const EdgeInsets.only(top: 150.0),
-                child: Text(widget.city,style: TextStyle(fontSize: 50,color: Color(0xFFFFFFFF))),
+                Align(alignment: Alignment.topRight,
+                    child: ElevatedButton(
+                      onPressed: refresh,
+                      child: const Icon(Icons.refresh),)),
+                const SizedBox(height: 60),
+                Text(widget.city,style: const TextStyle(fontSize: 50,color: Color(0xFFFFFFFF))),
 
-              ),
-              Text(widget.country,style: TextStyle(fontSize: 40,color: Color(0xFFFFFFFF))),
+                Text(widget.country,textAlign: TextAlign.center ,style: const TextStyle(fontSize: 40,color: Color(0xFFFFFFFF))),
 
-              SizedBox(height: 5),
+                const SizedBox(height: 5),
 
-              Image.asset('assets/${widget.condi}.png',height: 200,),
+                Image.asset('assets/${widget.condi}.png',height: 150,),
 
-              SizedBox(height: 10),
+                const SizedBox(height: 10),
 
-              Text(widget.condi,style: TextStyle(fontSize: 50,color: Colors.white)),
+                Text(
+                    widget.condi,
+                    style:  const TextStyle(fontSize: 40,color: Colors.white,)),
 
-              SizedBox(height: 15),
+                const SizedBox(height: 15),
 
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
 
-                children: [
+                    decoration: BoxDecoration(
+                      color: Colors.white30,
+                    borderRadius: BorderRadius.circular(25)
+                    ),
+                    height: 50,
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
-                  Row(
-                    children: [
-                      Container(child: Text('${widget.humidity}',style: TextStyle(fontSize: 30 ,color: Colors.white))),
-                      Image.asset('assets/Humidity.png',height: 40,width: 40),
-                    ],
+                      children: [
+
+                        Row(
+                          children: [
+                            Text('${widget.humidity}',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 30 ,color: Colors.white)),
+                            Image.asset('assets/Humidity.png',height: 40,width: 40),
+                          ],
+                        ),
+
+                        Row(
+                          children: [
+                            Text('${widget.tempc}°C',style: const TextStyle(fontSize: 30 ,color: Colors.white)),
+                            if(widget.tempc > 14 )
+                              Image.asset('assets/Hot.png',height: 40,width: 40),
+                            if(widget.tempc <= 14)
+                              Image.asset('assets/Cold.png',height: 40,width: 40,),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text('${widget.wind}',style: const TextStyle(fontSize: 30 ,color: Colors.white)),
+                            Image.asset('assets/WindSpeed.png',height: 40,width: 40),
+                          ],
+                        ),
+
+                      ],
+                    ),
                   ),
-
-                  Row(
-                    children: [
-                      Text('${widget.tempc}°C',style: TextStyle(fontSize: 30 ,color: Colors.white)),
-                      if(widget.tempc > 14 )
-                        Image.asset('assets/Hot.png',height: 40,width: 40),
-                      if(widget.tempc <= 14)
-                        Image.asset('assets/Cold.png',height: 40,width: 40,),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('${widget.wind}',style: TextStyle(fontSize: 30 ,color: Colors.white)),
-                      Image.asset('assets/WindSpeed.png',height: 40,width: 40),
-                    ],
-                  ),
-
-                ],
-              ),
-
-
-             // Image.network(widget.icon),
-            ],
-          )
-      ),
+                ),
+              ],
     );
   }
 }
