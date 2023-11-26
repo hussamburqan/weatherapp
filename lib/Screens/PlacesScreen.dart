@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import '../Model/City Data.dart';
 import '../Model/Weather Data.dart';
+import '../service/ImageExist.dart';
 import '../service/WeatherService.dart';
 
 class PlacesScreen extends StatefulWidget {
@@ -53,9 +54,9 @@ class _PlacesScreenState extends State<PlacesScreen> {
   Widget build(BuildContext context) {
     return LiquidPullToRefresh(
           onRefresh: refresh,
-          backgroundColor: Colors.deepPurple[200],
+          backgroundColor: Colors.white30,
           height: 200,
-          color: Colors.deepPurple,
+          color: Colors.white12,
           animSpeedFactor: 1,
           showChildOpacityTransition: true,
 
@@ -80,8 +81,8 @@ class _PlacesScreenState extends State<PlacesScreen> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 gradient: const LinearGradient(colors: [
-                                  Color(0xFF264698),
-                                  Color(0xFF007DFF),
+                                  Color(0xD9706E6E),
+                                  Color(0xD93D3C3C),
                                 ])
                             ),
                             child: SizedBox(
@@ -104,10 +105,9 @@ class _PlacesScreenState extends State<PlacesScreen> {
                                     ),
                                   ),
 
-                                  Image.asset(
-                                    'assets/${city.condition}.png',
-                                    width: 80,
-                                    height: 80,
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 5.0),
+                                    child: TestImage(assetImagePath: 'assets/${city.condition}.png',width: 80,height: 80),
                                   ),
                                 ],
                               ),

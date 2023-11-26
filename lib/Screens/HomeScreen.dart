@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../service/ImageExist.dart';
+
 class HomeScreen extends StatefulWidget {
 
   final double tempc ;
@@ -26,21 +28,21 @@ class HomeScreen extends StatefulWidget {
 
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>  {
 
-  Future<void> refresh() async {
-    return await Future.delayed(const Duration(seconds: 2));
+
+  void refresh() async {
+    return await Future.delayed(const Duration(seconds: 1));
   }
 
   @override
   Widget build(BuildContext context) {
     return  Column(
               children: [
-
                 Align(alignment: Alignment.topRight,
-                    child: ElevatedButton(
+                    child: IconButton(
                       onPressed: refresh,
-                      child: const Icon(Icons.refresh),)),
+                      icon: const Icon(Icons.refresh,color: Colors.white,size: 36),)),
                 const SizedBox(height: 60),
                 Text(widget.city,style: const TextStyle(fontSize: 50,color: Color(0xFFFFFFFF))),
 
@@ -48,13 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(height: 5),
 
-                Image.asset('assets/${widget.condi}.png',height: 150,),
+                TestImage(assetImagePath: 'assets/${widget.condi}.png',height: 150,width: 150),
 
                 const SizedBox(height: 10),
 
                 Text(
                     widget.condi,
-                    style:  const TextStyle(fontSize: 40,color: Colors.white,)),
+                    style:  const TextStyle(fontSize: 40,color: Colors.white,),textAlign: TextAlign.center),
 
                 const SizedBox(height: 15),
 
@@ -95,7 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             Image.asset('assets/WindSpeed.png',height: 40,width: 40),
                           ],
                         ),
-
                       ],
                     ),
                   ),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../Model/City Data.dart';
-
 class DrawerHome extends StatefulWidget {
+
 
   final Function(int) onPageSelected;
 
@@ -37,7 +36,7 @@ class _DrawerHomeState extends State<DrawerHome> {
             Padding(
               padding: const EdgeInsets.only(left: 10.0 ,right: 10.0),
               child: Container(
-                  decoration: BoxDecoration(color: const Color(0xFF2949BB),borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(color: const Color(0xBF706E6E),borderRadius: BorderRadius.circular(10)),
                   height: 55,
                   child: ListTile(
                     leading: const Icon(Icons.home,color: Colors.white),
@@ -55,7 +54,7 @@ class _DrawerHomeState extends State<DrawerHome> {
             Padding(
               padding: const EdgeInsets.only(left: 10.0,top: 10,right: 10),
               child: Container(
-                decoration: BoxDecoration(color: const Color(0xFF2949BB), borderRadius: BorderRadius.circular(10)),
+                decoration: BoxDecoration(color: const Color(0xBF706E6E), borderRadius: BorderRadius.circular(10)),
                 height: 55,
                 child: ListTile(
                   leading: const Icon(Icons.flag,color: Colors.white),
@@ -73,7 +72,7 @@ class _DrawerHomeState extends State<DrawerHome> {
             Padding(
               padding: const EdgeInsets.only(left: 10.0 ,top: 10,right: 10.0),
               child: Container(
-                decoration: BoxDecoration(color: const Color(0xFF2949BB),borderRadius: BorderRadius.circular(10)),
+                decoration: BoxDecoration(color: const Color(0xBF706E6E),borderRadius: BorderRadius.circular(10)),
                 height: 55,
                 child: ListTile(
                   leading: const Icon(Icons.calendar_month,color: Colors.white),
@@ -91,7 +90,7 @@ class _DrawerHomeState extends State<DrawerHome> {
             Padding(
               padding: const EdgeInsets.only(left: 10.0 ,top: 10,right: 10.0),
               child: Container(
-                decoration: BoxDecoration(color: const Color(0xFF2949BB),borderRadius: BorderRadius.circular(10)),
+                decoration: BoxDecoration(color: const Color(0xBF706E6E),borderRadius: BorderRadius.circular(10)),
                 height: 55,
                 child: ListTile(
                   leading: const Icon(Icons.timer,color: Colors.white),
