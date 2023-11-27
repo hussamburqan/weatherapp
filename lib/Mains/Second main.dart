@@ -69,8 +69,10 @@ class _SecondMain extends State<SecondMain> {
               ? '$place weather hours '
               : 'Lol',
 
-          style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Color(
-              0xFFFFFFFF)),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+              color: Color(0xFFFFFFFF)),
           ),
 
           elevation: 6,
@@ -88,14 +90,15 @@ class _SecondMain extends State<SecondMain> {
 
         body: Container(
           decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/background.jpg'),fit: BoxFit.fill)),
-          child: StreamBuilder(
-              stream: Connectivity().onConnectivityChanged,
-              initialData: ConnectivityResult.none,
-              builder: (context, AsyncSnapshot<ConnectivityResult> snapshot) {
-                if (snapshot.hasData) {
-                  ConnectivityResult result = snapshot.data!;
-                  if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi) {
-                    return FutureBuilder(
+          // child: StreamBuilder(
+          //     stream: Connectivity().onConnectivityChanged,
+          //     initialData: ConnectivityResult.none,
+          //     builder: (context, AsyncSnapshot<ConnectivityResult> snapshot) {
+          //       if (snapshot.hasData) {
+          //         ConnectivityResult result = snapshot.data!;
+          //         if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi || result == ConnectivityResult.ethernet) {
+          //           return
+          child: FutureBuilder(
                       future: getWeather(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
@@ -126,21 +129,21 @@ class _SecondMain extends State<SecondMain> {
                             return HoursScreen(city: place);
 
                           }else {
-                            return const Center(child: Text('Weather data is null.'));
+                            return  noInternet();
                           }
                         } else {
                           return const Center(child: CircularProgressIndicator());
                         }
                       },
-                    );
-                  } else {
-                    return noInternet();
-                  }
-                } else {
-                  return loading();
-                }
-              },
-            ),
+                //     );
+                //   } else {
+                //     return noInternet();
+                //   }
+                // } else {
+                //   return loading();
+                // }
+              // },
+             ),
         ),
         ),
     );
@@ -172,12 +175,12 @@ class _SecondMain extends State<SecondMain> {
             margin: const EdgeInsets.only(top: 20, bottom: 10),
             child: const Text(
               "No Internet connection",
-              style: TextStyle(fontSize: 22),
+              style: TextStyle(fontSize: 22,color: Colors.white),
             ),
           ),
           Container(
             margin: const EdgeInsets.only(bottom: 20),
-            child: const Text("Check your connection"),
+            child: const Text("Check your connection",style: TextStyle(color: Colors.white)),
           ),
         ],
       ),

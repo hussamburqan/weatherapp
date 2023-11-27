@@ -21,6 +21,7 @@ class _DailyScreenState extends State<DailyScreen> {
   Future<void> refresh() async {
 
     await Future.delayed(const Duration(milliseconds: 10));
+
     await getDaily();
 
   }

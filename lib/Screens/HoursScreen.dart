@@ -17,13 +17,11 @@ class _HoursScreenState extends State<HoursScreen> {
   HoursService hoursService = HoursService();
   List<HourlyData>? hoursData;
   String state = 'forecast.json';
-  int i = 0 ;
 
   Future<void> refresh() async {
 
     await Future.delayed(const Duration(milliseconds: 10));
     await getWeather();
-    print(i);
   }
 
   Future<void> getWeather() async {
