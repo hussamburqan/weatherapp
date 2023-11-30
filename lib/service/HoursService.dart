@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:wather_app/Model/DailyData.dart';
+import 'package:weather_app/Model/DailyData.dart';
 import '../Model/Hourly Data.dart';
 
 class HoursService {
@@ -11,7 +11,6 @@ class HoursService {
         'key': '79fb3945227647ad94595829231911',
         'q': place,
         'days': day,
-
       };
 
       final uri = Uri.http('api.weatherapi.com', '/v1/$state', queryParameters);

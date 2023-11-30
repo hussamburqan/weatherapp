@@ -1,26 +1,18 @@
 import 'package:flutter/material.dart';
-
+import 'package:weather_app/Model/Weather%20Data.dart';
 import '../service/ImageExist.dart';
 
 class HomeScreen extends StatefulWidget {
 
-  final double tempc ;
-  final String condi ;
+  final WeatherData DataWeather;
+
   final String city;
-  final int humidity;
-  final double wind;
-  final String country;
-  final String time;
 
   const HomeScreen({
     super.key,
-    required this.wind,
-    required this.humidity,
-    required this.tempc,
-    required this.condi,
+    required this.DataWeather,
     required this.city,
-    required this.country,
-    required this.time
+
   });
 
   @override
@@ -46,16 +38,16 @@ class _HomeScreenState extends State<HomeScreen>  {
                 const SizedBox(height: 60),
                 Text(widget.city,style: const TextStyle(fontSize: 50,color: Color(0xFFFFFFFF))),
 
-                Text(widget.country,textAlign: TextAlign.center ,style: const TextStyle(fontSize: 40,color: Color(0xFFFFFFFF))),
+                Text(widget.DataWeather.country,textAlign: TextAlign.center ,style: const TextStyle(fontSize: 40,color: Color(0xFFFFFFFF))),
 
                 const SizedBox(height: 5),
 
-                TestImage(assetImagePath: 'assets/${widget.condi}.png',height: 150,width: 150),
+                TestImage(assetImagePath: 'assets/${widget.DataWeather.condition}.png',height: 150,width: 150),
 
                 const SizedBox(height: 10),
 
                 Text(
-                    widget.condi,
+                    widget.DataWeather.condition,
                     style:  const TextStyle(fontSize: 40,color: Colors.white,),textAlign: TextAlign.center),
 
                 const SizedBox(height: 15),
@@ -75,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen>  {
 
                         Row(
                           children: [
-                            Text('${widget.humidity}',
+                            Text('${widget.DataWeather.humidity}',
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(fontSize: 30 ,color: Colors.white)),
                             Image.asset('assets/Humidity.png',height: 40,width: 40),
@@ -84,16 +76,16 @@ class _HomeScreenState extends State<HomeScreen>  {
 
                         Row(
                           children: [
-                            Text('${widget.tempc}°C',style: const TextStyle(fontSize: 30 ,color: Colors.white)),
-                            if(widget.tempc > 14 )
+                            Text('${widget.DataWeather.temperatureC}°C',style: const TextStyle(fontSize: 30 ,color: Colors.white)),
+                            if(widget.DataWeather.temperatureC > 14 )
                               Image.asset('assets/Hot.png',height: 40,width: 40),
-                            if(widget.tempc <= 14)
+                            if(widget.DataWeather.temperatureC <= 14)
                               Image.asset('assets/Cold.png',height: 40,width: 40,),
                           ],
                         ),
                         Row(
                           children: [
-                            Text('${widget.wind}',style: const TextStyle(fontSize: 30 ,color: Colors.white)),
+                            Text('${widget.DataWeather.wind}',style: const TextStyle(fontSize: 30 ,color: Colors.white)),
                             Image.asset('assets/WindSpeed.png',height: 40,width: 40),
                           ],
                         ),

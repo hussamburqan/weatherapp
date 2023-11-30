@@ -1,7 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:wather_app/Screens/PlacesScreen.dart';
+import 'package:weather_app/Screens/PlacesScreen.dart';
 import '../Model/Weather Data.dart';
 import '../Screens/DailyScreen.dart';
 import '../Screens/Drawer_Home.dart';
@@ -24,7 +24,7 @@ class _SecondMain extends State<SecondMain> {
 
   int _numberScreen = 0;
 
-  final _mybox = Hive.box('mybox');
+  final _Home = Hive.box('Home');
 
   void _onPageSelected(int num) {
     setState(() {
@@ -35,9 +35,8 @@ class _SecondMain extends State<SecondMain> {
   @override
   void initState() {
     super.initState();
+    place = _Home.get(1) ?? 'London';
     getWeather();
-
-    place = _mybox.get(1) ?? 'London';
   }
 
   Future<void> getWeather() async {
@@ -90,15 +89,14 @@ class _SecondMain extends State<SecondMain> {
 
         body: Container(
           decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/background.jpg'),fit: BoxFit.fill)),
-          // child: StreamBuilder(
-          //     stream: Connectivity().onConnectivityChanged,
-          //     initialData: ConnectivityResult.none,
-          //     builder: (context, AsyncSnapshot<ConnectivityResult> snapshot) {
-          //       if (snapshot.hasData) {
-          //         ConnectivityResult result = snapshot.data!;
-          //         if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi || result == ConnectivityResult.ethernet) {
-          //           return
-          child: FutureBuilder(
+          child: StreamBuilder(
+              stream: Connectivity().onConnectivityChanged,
+              initialData: ConnectivityResult.none,
+              builder: (context, AsyncSnapshot<ConnectivityResult> snapshot) {
+                if (snapshot.hasData) {
+                  ConnectivityResult result = snapshot.data!;
+                  if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi || result == ConnectivityResult.ethernet) {
+                    return FutureBuilder(
                       future: getWeather(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
@@ -107,21 +105,18 @@ class _SecondMain extends State<SecondMain> {
                           }
                           if (weather != null && _numberScreen == 0) {
                             return HomeScreen(
-                              condi: weather!.condition,
-                              tempc: weather!.temperatureC,
-                              country: weather!.country,
-                              humidity: weather!.humidity,
-                              wind: weather!.wind,
+                              DataWeather: weather!,
                               city: place,
-                              time: weather!.time,
                             );
                           } else if (_numberScreen == 1) {
+                           try{
                             return PlacesScreen(onPageSelected: (p0) {_onPageSelected(0);},onPlaceSelected: (selectedPlace) {
                               setState(() {
-                                place = selectedPlace;
-                                _mybox.put(1, place);
+                                _Home.put(1, selectedPlace);
+                                place = _Home.get(1);
+
                               });
-                            });
+                            });}catch(e){rethrow;}
                           } else if (_numberScreen == 2){
                             return DailyScreen(city: place);
 
@@ -135,15 +130,15 @@ class _SecondMain extends State<SecondMain> {
                           return const Center(child: CircularProgressIndicator());
                         }
                       },
-                //     );
-                //   } else {
-                //     return noInternet();
-                //   }
-                // } else {
-                //   return loading();
-                // }
-              // },
-             ),
+                     );
+                  } else {
+                    return noInternet();
+                  }
+                } else {
+                  return loading();
+                }
+              },
+              ),
         ),
         ),
     );

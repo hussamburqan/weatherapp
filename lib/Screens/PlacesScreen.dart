@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import '../Model/City Data.dart';
 import '../Model/Weather Data.dart';
 import '../service/ImageExist.dart';
 import '../service/WeatherService.dart';
+import 'DialogCity.dart';
 
 class PlacesScreen extends StatefulWidget {
   final Function(String) onPlaceSelected;
@@ -16,30 +18,50 @@ class PlacesScreen extends StatefulWidget {
 }
 
 class _PlacesScreenState extends State<PlacesScreen> {
+
   WeatherService weatherService = WeatherService();
   WeatherData? weather;
-  int i = 0 ;
-
   String state1 = 'current.json';
-  late List<City> citiesList;
+  late final List<City> citiesList;
+  late final TextEditingController _controller;
+
 
   @override
   void initState() {
     super.initState();
-    citiesList = City.citiesList;
+
+    getdata();
+    _controller = TextEditingController();
+  }
+
+  Future<void> getdata() async {
+    final box = await Hive.box('Places');
+    if(box.isEmpty){
+      for(int i =0 ; i < City.citiesList.length ; i++){
+        box.add(City.citiesList[i].city);
+      }
+    }else {
+      City.citiesList = [];
+      for(int i =0 ; i < box.length ; i++){
+          City.citiesList.add(City(
+              condition: '',
+              tempc: '',
+              city: box.getAt(i)
+          ));
+      }
+      citiesList = City.citiesList;
+    }
   }
 
   Future<void> refresh() async {
 
     await Future.delayed(const Duration(seconds: 1));
     setState(() {
-
     });
   }
 
   Future<void> getWeather(City city) async {
     try {
-
       await Future.delayed(const Duration(milliseconds: 20));
 
       weather = (await weatherService.getWeatherData(city.city, state1));
@@ -51,17 +73,20 @@ class _PlacesScreenState extends State<PlacesScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        backgroundColor: const Color(0xFF706E6E),
-        child: const Icon(Icons.add),
-      ),
-    backgroundColor: Colors.transparent,
-      body: LiquidPullToRefresh(
+    return FutureBuilder(
+      future: getdata(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done){
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: createNewCity,
+            backgroundColor: const Color(0xFF706E6E),
+            child: const Icon(Icons.add),
+          ),
+          backgroundColor: Colors.transparent,
+          body: LiquidPullToRefresh(
             onRefresh: refresh,
             backgroundColor: Colors.white30,
             height: 200,
@@ -69,7 +94,7 @@ class _PlacesScreenState extends State<PlacesScreen> {
             animSpeedFactor: 1,
             showChildOpacityTransition: true,
 
-            child:  Padding(
+            child: Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: ListView.builder(
                 itemCount: citiesList.length,
@@ -85,7 +110,8 @@ class _PlacesScreenState extends State<PlacesScreen> {
                             widget.onPageSelected(0);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0,left: 8.0,right: 8.0),
+                            padding: const EdgeInsets.only(
+                                bottom: 8.0, left: 8.0, right: 8.0),
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -101,22 +127,38 @@ class _PlacesScreenState extends State<PlacesScreen> {
 
                                     Expanded(
                                       child: Padding(
-                                        padding: const EdgeInsets.only(left: 12.0),
+                                        padding: const EdgeInsets.only(
+                                            left: 12.0),
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .spaceEvenly,
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .start,
                                           children: [
-                                            Text(city.city,style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
-                                            Text('${city.tempc}°C',style: const TextStyle(color: Colors.white)),
-                                            Text(city.condition,style: const TextStyle(color: Colors.white)),
+                                            Text(city.city,
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white),),
+                                            Text('${city.tempc}°C',
+                                                style: const TextStyle(
+                                                    color: Colors.white)),
+                                            Text(city.condition,
+                                                style: const TextStyle(
+                                                    color: Colors.white)),
                                           ],
                                         ),
                                       ),
                                     ),
 
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 5.0),
-                                      child: TestImage(assetImagePath: 'assets/${city.condition}.png',width: 80,height: 80),
+                                      padding: const EdgeInsets.only(
+                                          right: 5.0),
+                                      child: TestImage(
+                                          assetImagePath: 'assets/${city
+                                              .condition}.png',
+                                          width: 80,
+                                          height: 80),
                                     ),
                                   ],
                                 ),
@@ -125,11 +167,8 @@ class _PlacesScreenState extends State<PlacesScreen> {
                           ),
                         );
                       } else {
-                        return const SizedBox(
-                          height: 70,
-                          child: Center(
+                        return Center(
                             child: CircularProgressIndicator(),
-                          ),
                         );
                       }
                     },
@@ -137,7 +176,36 @@ class _PlacesScreenState extends State<PlacesScreen> {
                 },
               ),
             ),
-      ),
+          ),
+        );
+      }else {
+          return Center(
+              child: CircularProgressIndicator(),
+          );
+        }},
     );
   }
+
+  void createNewCity(){
+    showDialog(
+      context: context,
+      builder: (contest) {
+        return Dialogbox(
+          controller: _controller,
+          onsave: SaveNewCity,
+          oncancel: ()=> Navigator.of(context, rootNavigator: true).pop(),
+        );
+      },
+    );
+  }
+
+  Future<void> SaveNewCity() async {
+    final box = await Hive.box('Places');
+    citiesList.add(City(condition: '', tempc: '', city: _controller.text));
+    box.add(_controller.text);
+    setState(() {
+      Navigator.of(context, rootNavigator: true).pop();
+    });
+  }
+
 }
