@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import '../Model/City Data.dart';
@@ -104,66 +105,82 @@ class _PlacesScreenState extends State<PlacesScreen> {
                     future: getWeather(city),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
-                        return GestureDetector(
-                          onTap: () {
-                            widget.onPlaceSelected(city.city);
-                            widget.onPageSelected(0);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 8.0, left: 8.0, right: 8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  gradient: const LinearGradient(colors: [
-                                    Color(0xD9706E6E),
-                                    Color(0xD93D3C3C),
-                                  ])
-                              ),
-                              child: SizedBox(
-                                height: 90,
-                                child: Row(
-                                  children: [
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 8.0, left: 8.0, right: 8.0),
+                          child: Slidable(
+                            child: GestureDetector(
+                              onTap: () {
+                                widget.onPlaceSelected(city.city);
+                                widget.onPageSelected(0);
+                              },
 
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 12.0),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .spaceEvenly,
-                                          crossAxisAlignment: CrossAxisAlignment
-                                              .start,
-                                          children: [
-                                            Text(city.city,
-                                              style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white),),
-                                            Text('${city.tempc}°C',
-                                                style: const TextStyle(
-                                                    color: Colors.white)),
-                                            Text(city.condition,
-                                                style: const TextStyle(
-                                                    color: Colors.white)),
-                                          ],
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: const LinearGradient(colors: [
+                                        Color(0xD9706E6E),
+                                        Color(0xD93D3C3C),
+                                      ])
+                                  ),
+                                  child: SizedBox(
+                                    height: 90,
+                                    child: Row(
+                                      children: [
+
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 12.0),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .spaceEvenly,
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: [
+                                                Text(city.city,
+                                                  style: const TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.white),),
+                                                Text('${city.tempc}°C',
+                                                    style: const TextStyle(
+                                                        color: Colors.white)),
+                                                Text(city.condition,
+                                                    style: const TextStyle(
+                                                        color: Colors.white)),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
 
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 5.0),
-                                      child: TestImage(
-                                          assetImagePath: 'assets/${city
-                                              .condition}.png',
-                                          width: 80,
-                                          height: 80),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 5.0),
+                                          child: TestImage(
+                                              assetImagePath: 'assets/${city
+                                                  .condition}.png',
+                                              width: 80,
+                                              height: 80),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
+                            endActionPane: ActionPane(
+                            motion: const StretchMotion(),
+                            children: [
+
+                              SlidableAction(
+                                    onPressed: (BuildContext context) => deleteCity(index),
+                                    icon: Icons.delete_forever,
+                                    backgroundColor: Color(0xC0F56262),
+                                  borderRadius: BorderRadius.circular(10),
+
+                                  ),
+                            ],
+                          ),
                           ),
                         );
                       } else {
@@ -208,4 +225,11 @@ class _PlacesScreenState extends State<PlacesScreen> {
     });
   }
 
+  Future<void> deleteCity(int index) async {
+    final box = await Hive.box('Places');
+    citiesList.removeAt(index);
+    box.deleteAt(index);
+    setState(() {
+    });
+  }
 }
