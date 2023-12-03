@@ -41,7 +41,7 @@ class _SecondMain extends State<SecondMain> {
 
   Future<void> getWeather() async {
     try {
-      weather = (await weatherService.getWeatherData(place, state));
+    weather = (await weatherService.getWeatherData(place, state));
     } catch (e) {
         print('Error fetching weather data: $e');
 

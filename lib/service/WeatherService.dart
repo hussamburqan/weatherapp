@@ -11,10 +11,8 @@ Future<WeatherData> getWeatherData(String place,String state) async {
     'key': '79fb3945227647ad94595829231911',
     'q': place,
     };
-
     final uri = Uri.http(
       'api.weatherapi.com','/v1/$state',queryParematers);
-
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
@@ -24,7 +22,9 @@ Future<WeatherData> getWeatherData(String place,String state) async {
     throw Exception('can not get Weather');}
 
   }catch (e)
-  { rethrow;}
+  {
+    rethrow;
+  }
 }
 }
 
