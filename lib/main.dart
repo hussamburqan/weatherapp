@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'Mains/Second main.dart';
+import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,18 +12,36 @@ void main() async{
   await Hive.openBox('Home');
   await Hive.openBox('Places');
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SecondMain()
+    return MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => PlaceProvider(),)
+    ],
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: SecondMain()
+        ),
     );
   }
+
 }
 
+class PlaceProvider extends ChangeNotifier{
+  final _Home = Hive.box('Home');
+
+  void SetPlace(String select){
+    _Home.put(1, select);
+    notifyListeners();
+  }
+  String getPlace(){
+    return _Home.get(1) ?? 'Hebron Ps';
+  }
+  
+}

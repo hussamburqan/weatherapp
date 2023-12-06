@@ -4,7 +4,7 @@ import '../Model/Weather Data.dart';
 
 class WeatherService {
 
-Future<WeatherData> getWeatherData(String place,String state) async {
+Future<WeatherData> getWeatherData(String place) async {
 
   try{
     final queryParematers = {
@@ -12,7 +12,7 @@ Future<WeatherData> getWeatherData(String place,String state) async {
     'q': place,
     };
     final uri = Uri.http(
-      'api.weatherapi.com','/v1/$state',queryParematers);
+      'api.weatherapi.com','/v1/current.json',queryParematers);
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {

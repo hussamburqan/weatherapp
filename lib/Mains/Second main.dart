@@ -1,7 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/Screens/PlacesScreen.dart';
+import 'package:weather_app/main.dart';
 import '../Model/Weather Data.dart';
 import '../Screens/DailyScreen.dart';
 import '../Screens/Drawer_Home.dart';
@@ -19,12 +20,8 @@ class SecondMain extends StatefulWidget {
 class _SecondMain extends State<SecondMain> {
   WeatherService weatherService = WeatherService();
   WeatherData? weather;
-  String state = 'current.json';
-  late String place;
-
   int _numberScreen = 0;
-
-  final _Home = Hive.box('Home');
+  late String place;
 
   void _onPageSelected(int num) {
     setState(() {
@@ -35,13 +32,12 @@ class _SecondMain extends State<SecondMain> {
   @override
   void initState() {
     super.initState();
-    place = _Home.get(1) ?? 'London';
-    getWeather();
   }
 
   Future<void> getWeather() async {
+    place = context.watch<PlaceProvider>().getPlace();
     try {
-    weather = (await weatherService.getWeatherData(place, state));
+    weather = (await weatherService.getWeatherData(place));
     } catch (e) {
         print('Error fetching weather data: $e');
 
@@ -56,18 +52,16 @@ class _SecondMain extends State<SecondMain> {
         backgroundColor: Colors.transparent,
         drawer: DrawerHome(onPageSelected: _onPageSelected),
         appBar: AppBar(
-
           title: Text(
             _numberScreen == 0
               ? 'Weather App'
               : _numberScreen == 1
               ? 'Places'
               : _numberScreen == 2
-              ? '$place daily weather'
+              ? '${place} daily weather'
               : _numberScreen == 3
-              ? '$place weather hours '
+              ? '${place} weather hours '
               : 'Lol',
-
           style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 25,
@@ -106,36 +100,39 @@ class _SecondMain extends State<SecondMain> {
                           if (weather != null && _numberScreen == 0) {
                             return HomeScreen(
                               DataWeather: weather!,
-                              city: place,
                             );
                           } else if (_numberScreen == 1) {
                            try{
                             return PlacesScreen(onPageSelected: (p0) {_onPageSelected(0);},onPlaceSelected: (selectedPlace) {
-                              setState(() {
-                                _Home.put(1, selectedPlace);
-                                place = _Home.get(1);
-
-                              });
-                            });}catch(e){rethrow;}
-                          } else if (_numberScreen == 2){
-                            return DailyScreen(city: place);
-
-                          }else if(_numberScreen == 3){
-                            return HoursScreen(city: place);
-
-                          }else {
-                            return  noInternet();
+                              context.read<PlaceProvider>().SetPlace(selectedPlace);
+                            });}catch(e){rethrow;
+                           }
                           }
-                        } else {
+                          else if (_numberScreen == 2){
+                            return DailyScreen(city: place);
+                          }
+                          else if(_numberScreen == 3){
+                            return HoursScreen(city: place);
+                          }
+                          else {
+                            return  Text('Error with get data');
+                          }
+                        }
+                        else {
                           return const Center(child: CircularProgressIndicator());
                         }
                       },
                      );
-                  } else {
+                  }
+                  else {
                     return noInternet();
                   }
-                } else {
-                  return loading();
+                }
+                else {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                    ),
+                  );
                 }
               },
               ),
@@ -143,17 +140,7 @@ class _SecondMain extends State<SecondMain> {
         ),
     );
   }
-
-
 }
-
-
-  Widget loading() {
-    return const Center(
-      child: CircularProgressIndicator(
-      ),
-    );
-  }
 
   Widget noInternet() {
     return Center(
@@ -163,7 +150,7 @@ class _SecondMain extends State<SecondMain> {
         children: [
           Image.asset(
             'assets/no_internet.png',
-            color: Colors.red,
+            color: Color(0xBF706E6E),
             height: 100,
           ),
           Container(

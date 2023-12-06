@@ -13,7 +13,7 @@ class City {
     City(
       condition: '',
       tempc: '0',
-      city: 'Ramallah',
+      city: 'Hebron Ps',
     ),
     City(
       condition: '',
