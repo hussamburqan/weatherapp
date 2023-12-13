@@ -22,7 +22,6 @@ class _PlacesScreenState extends State<PlacesScreen> {
 
   WeatherService weatherService = WeatherService();
   WeatherData? weather;
-  String state1 = 'current.json';
   late final List<City> citiesList;
   late final TextEditingController _controller;
 
@@ -65,7 +64,7 @@ class _PlacesScreenState extends State<PlacesScreen> {
     try {
       await Future.delayed(const Duration(milliseconds: 20));
 
-      weather = (await weatherService.getWeatherData(city.city, state1));
+      weather = (await weatherService.getWeatherData(city.city));
 
       city.tempc = weather?.temperatureC.toString() ?? 'N/A';
       city.condition = weather?.condition ?? 'N/A';
@@ -114,7 +113,6 @@ class _PlacesScreenState extends State<PlacesScreen> {
                                 widget.onPlaceSelected(city.city);
                                 widget.onPageSelected(0);
                               },
-
                                 child: Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -177,10 +175,9 @@ class _PlacesScreenState extends State<PlacesScreen> {
                                     icon: Icons.delete_forever,
                                     backgroundColor: Color(0xC0F56262),
                                   borderRadius: BorderRadius.circular(10),
-
-                                  ),
+                              ),
                             ],
-                          ),
+                            ),
                           ),
                         );
                       } else {
@@ -195,7 +192,8 @@ class _PlacesScreenState extends State<PlacesScreen> {
             ),
           ),
         );
-      }else {
+      }
+        else {
           return Center(
               child: CircularProgressIndicator(),
           );

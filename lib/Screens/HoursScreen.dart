@@ -16,7 +16,6 @@ class HoursScreen extends StatefulWidget {
 class _HoursScreenState extends State<HoursScreen> {
   HoursService hoursService = HoursService();
   List<HourlyData>? hoursData;
-  String state = 'forecast.json';
 
   Future<void> refresh() async {
 
@@ -27,7 +26,7 @@ class _HoursScreenState extends State<HoursScreen> {
   Future<void> getWeather() async {
     try {
       await Future.delayed(const Duration(milliseconds: 10));
-      final newHoursData = await hoursService.gethoursData(widget.city, state,'1'/* days */);
+      final newHoursData = await hoursService.gethoursData(widget.city,'1'/* days */);
       setState(() {
         hoursData = newHoursData.cast<HourlyData>();
       });

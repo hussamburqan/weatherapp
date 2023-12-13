@@ -16,7 +16,6 @@ class DailyScreen extends StatefulWidget {
 class _DailyScreenState extends State<DailyScreen> {
   HoursService hoursService = HoursService();
   List<DailyData>? daysData;
-  String state = 'forecast.json';
 
   Future<void> refresh() async {
 
@@ -29,7 +28,7 @@ class _DailyScreenState extends State<DailyScreen> {
   Future<void> getDaily() async {
     try {
       await Future.delayed(const Duration(milliseconds: 10));
-      final newDailyData = await hoursService.gethoursData(widget.city, state,'7' /* days */);
+      final newDailyData = await hoursService.gethoursData(widget.city,'7' /* days */);
       setState(() {
         daysData = newDailyData.cast<DailyData>();
       });
@@ -82,7 +81,6 @@ class _DailyScreenState extends State<DailyScreen> {
           itemBuilder: (context, index) {
             final day = daysData![index];
             DateTime dateTime = DateTime.parse('${day.dateTime}');
-
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 8.0,left: 8.0,right: 8.0),
