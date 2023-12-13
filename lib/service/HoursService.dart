@@ -9,7 +9,7 @@ class HoursService {
 
     try {
       final queryParameters = {
-        'key': '79fb3945227647ad94595829231911',
+        'key': '486f6b5f8aac47fba51124019231112',
         'q': place,
         'days': day,
       };
@@ -18,7 +18,6 @@ class HoursService {
 
 
       final response = await http.get(uri);
-
 
         if (response.statusCode == 200 && day == '1') {
         final List<dynamic> list = json.decode(response.body)['forecast']['forecastday'][0]['hour'];

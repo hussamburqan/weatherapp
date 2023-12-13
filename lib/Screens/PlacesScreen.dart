@@ -113,7 +113,6 @@ class _PlacesScreenState extends State<PlacesScreen> {
                                 widget.onPlaceSelected(city.city);
                                 widget.onPageSelected(0);
                               },
-
                                 child: Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -176,10 +175,9 @@ class _PlacesScreenState extends State<PlacesScreen> {
                                     icon: Icons.delete_forever,
                                     backgroundColor: Color(0xC0F56262),
                                   borderRadius: BorderRadius.circular(10),
-
-                                  ),
+                              ),
                             ],
-                          ),
+                            ),
                           ),
                         );
                       } else {
@@ -194,7 +192,8 @@ class _PlacesScreenState extends State<PlacesScreen> {
             ),
           ),
         );
-      }else {
+      }
+        else {
           return Center(
               child: CircularProgressIndicator(),
           );

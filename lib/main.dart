@@ -1,9 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'Mains/Second main.dart';
 import 'package:provider/provider.dart';
-import 'package:geolocator/geolocator.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +16,6 @@ void main() async{
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
@@ -30,7 +27,6 @@ class MyApp extends StatelessWidget {
         ),
     );
   }
-
 }
 
 class PlaceProvider extends ChangeNotifier{
@@ -40,8 +36,8 @@ class PlaceProvider extends ChangeNotifier{
     _Home.put(1, select);
     notifyListeners();
   }
+
   String getPlace(){
     return _Home.get(1) ?? 'Hebron Ps';
   }
-  
 }

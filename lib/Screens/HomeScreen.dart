@@ -21,20 +21,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>  {
 
-
-  void refresh() async {
-    return await Future.delayed(const Duration(seconds: 1));
-  }
-
   @override
   Widget build(BuildContext context) {
     return  Column(
               children: [
-                Align(alignment: Alignment.topRight,
-                    child: IconButton(
-                      onPressed: refresh,
-                      icon: const Icon(Icons.refresh,color: Colors.white,size: 36),)),
-                const SizedBox(height: 60),
+
+                const SizedBox(height: 100),
                 Text(context.watch<PlaceProvider>().getPlace(),style: const TextStyle(fontSize: 50,color: Color(0xFFFFFFFF))),
 
                 Text(widget.DataWeather.country,textAlign: TextAlign.center ,style: const TextStyle(fontSize: 40,color: Color(0xFFFFFFFF))),

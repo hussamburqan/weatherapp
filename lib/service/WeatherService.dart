@@ -4,28 +4,29 @@ import '../Model/Weather Data.dart';
 
 class WeatherService {
 
-Future<WeatherData> getWeatherData(String place) async {
+  Future<WeatherData> getWeatherData(String place) async {
 
-  try{
-    final queryParematers = {
-    'key': '79fb3945227647ad94595829231911',
-    'q': place,
-    };
-    final uri = Uri.http(
-      'api.weatherapi.com','/v1/current.json',queryParematers);
-    final response = await http.get(uri);
+    try{
+      final queryParematers = {
+        'key': '486f6b5f8aac47fba51124019231112',
+        'q': place,
+      };
 
-    if (response.statusCode == 200) {
-    return WeatherData.fromJson(jsonDecode(response.body));
+      final uri = Uri.http(
+          'api.weatherapi.com','/v1/current.json',queryParematers);
+      final response = await http.get(uri);
 
-    } else {
-    throw Exception('can not get Weather');}
+      if (response.statusCode == 200) {
+        return WeatherData.fromJson(jsonDecode(response.body));
 
-  }catch (e)
-  {
-    rethrow;
+      } else {
+        throw Exception('can not get Weather');}
+
+    }catch (e)
+    {
+      rethrow;
+    }
   }
-}
 }
 
 

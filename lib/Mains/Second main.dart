@@ -7,6 +7,7 @@ import '../Model/Weather Data.dart';
 import '../Screens/DailyScreen.dart';
 import '../Screens/Drawer_Home.dart';
 import '../Screens/HoursScreen.dart';
+import '../Screens/MapScreen.dart';
 import '../service/WeatherService.dart';
 import '../Screens/HomeScreen.dart';
 
@@ -22,6 +23,7 @@ class _SecondMain extends State<SecondMain> {
   WeatherData? weather;
   int _numberScreen = 0;
   late String place;
+  bool statsOfData = false ;
 
   void _onPageSelected(int num) {
     setState(() {
@@ -32,15 +34,17 @@ class _SecondMain extends State<SecondMain> {
   @override
   void initState() {
     super.initState();
+    getWeather();
   }
 
   Future<void> getWeather() async {
-    place = context.watch<PlaceProvider>().getPlace();
+    place = Provider.of<PlaceProvider>(context, listen: false).getPlace();
     try {
     weather = (await weatherService.getWeatherData(place));
+    statsOfData = true;
     } catch (e) {
+      statsOfData = false;
         print('Error fetching weather data: $e');
-
     }
   }
 
@@ -54,14 +58,16 @@ class _SecondMain extends State<SecondMain> {
         appBar: AppBar(
           title: Text(
             _numberScreen == 0
-              ? 'Weather App'
-              : _numberScreen == 1
-              ? 'Places'
-              : _numberScreen == 2
-              ? '${place} daily weather'
-              : _numberScreen == 3
-              ? '${place} weather hours '
-              : 'Lol',
+                ? 'Weather App'
+                : _numberScreen == 1
+                ? 'Places'
+                : _numberScreen == 2
+                ? '${place} daily weather'
+                : _numberScreen == 3
+                ? '${place} weather hours '
+                : _numberScreen == 4
+                ? 'Map'
+                : 'Lol',
           style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 25,
@@ -97,9 +103,16 @@ class _SecondMain extends State<SecondMain> {
                           if (snapshot.hasError) {
                             return Center(child: Text('Error: ${snapshot.error}'));
                           }
-                          if (weather != null && _numberScreen == 0) {
-                            return HomeScreen(
-                              DataWeather: weather!,
+                          if (weather != null && _numberScreen == 0 && statsOfData) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  getWeather();
+                                });
+                              },
+                              child: HomeScreen(
+                                DataWeather: weather!,
+                              ),
                             );
                           } else if (_numberScreen == 1) {
                            try{
@@ -108,14 +121,20 @@ class _SecondMain extends State<SecondMain> {
                             });}catch(e){rethrow;
                            }
                           }
-                          else if (_numberScreen == 2){
+                          else if (_numberScreen == 2 ){
                             return DailyScreen(city: place);
                           }
-                          else if(_numberScreen == 3){
+                          else if(_numberScreen == 3 ){
                             return HoursScreen(city: place);
                           }
-                          else {
-                            return  Text('Error with get data');
+                          else if(_numberScreen == 4){
+                            return MapScreen(onPageSelected: (int) {
+                              getWeather();
+                              _onPageSelected(0);
+                              });
+
+                          }else {
+                            return  Center(child: Text('Place name error\n${context.watch<PlaceProvider>().getPlace()}',style: TextStyle(color: Colors.white,fontSize: 40),));
                           }
                         }
                         else {
@@ -124,18 +143,17 @@ class _SecondMain extends State<SecondMain> {
                       },
                      );
                   }
-                  else {
+                  else if(snapshot.hasError){
                     return noInternet();
+                  }else
+                  {return const Center(
+                      child: CircularProgressIndicator());
                   }
                 }
-                else {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                    ),
-                  );
-                }
+                else return const Center(
+                child: CircularProgressIndicator());
               },
-              ),
+          ),
         ),
         ),
     );
