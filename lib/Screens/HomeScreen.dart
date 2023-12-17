@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:weather_app/Model/Weather%20Data.dart';
-import 'package:weather_app/main.dart';
 import '../service/ImageExist.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen>  {
               children: [
 
                 const SizedBox(height: 100),
-                Text(context.watch<PlaceProvider>().getPlace(),style: const TextStyle(fontSize: 50,color: Color(0xFFFFFFFF))),
+                Text(widget.DataWeather.city,style: const TextStyle(fontSize: 50,color: Color(0xFFFFFFFF))),
 
                 Text(widget.DataWeather.country,textAlign: TextAlign.center ,style: const TextStyle(fontSize: 40,color: Color(0xFFFFFFFF))),
 

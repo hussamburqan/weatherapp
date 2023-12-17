@@ -15,16 +15,15 @@ void main() async{
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => PlaceProvider(),)
     ],
-      child: MaterialApp(
+        child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: SecondMain()
-        ),
+          home: SecondMain(),
+        )
     );
   }
 }
@@ -38,6 +37,6 @@ class PlaceProvider extends ChangeNotifier{
   }
 
   String getPlace(){
-    return _Home.get(1) ?? 'Hebron Ps';
+    return _Home.get(1) ?? 'Hebron PS';
   }
 }

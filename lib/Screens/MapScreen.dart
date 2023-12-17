@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -59,17 +58,10 @@ class _MapScreenState extends State<MapScreen> {
     final GoogleMapController controller = await _mapController.future;
     controller.animateCamera(
         CameraUpdate.newCameraPosition(_myCurrentLocationCameraPosition));
-    try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        position!.latitude,
-        position!.longitude,
-      );
-      widget.onPageSelected(0);
 
-      //في مشكله من الapi نفسه الاسم ما بتعرف عليه لانه إسم عبري
-      context.read<PlaceProvider>().SetPlace('${placemarks[0].locality}');
-      print('${placemarks[0]}');
-    }catch(err){}
+    widget.onPageSelected(0);
+    Provider.of<PlaceProvider>(context, listen: false).SetPlace('${position!.latitude},${position!.longitude}');
+
   }
 
   @override
@@ -89,14 +81,22 @@ class _MapScreenState extends State<MapScreen> {
           ),
         ],
       ),
-      floatingActionButton: Container(
-        margin: EdgeInsets.fromLTRB(0, 0, 8, 30),
-        child: FloatingActionButton(
-          backgroundColor: Colors.cyan,
-          onPressed: _goToMyCurrentLocation,
-          child: Icon(Icons.place, color: Colors.white),
+      floatingActionButton:  Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(color: Color(0x804F4F52),
+                child: Text('Get Your Location')),
+            SizedBox(height: 2),
+            FloatingActionButton(
+              backgroundColor: Color(0xFF706E6E),
+              onPressed: _goToMyCurrentLocation,
+              child: Icon(Icons.place, color: Colors.white),
+
+            ),
+            SizedBox(height: 20),
+          ],
         ),
-      ),
+
     );
   }
 }

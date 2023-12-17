@@ -110,7 +110,6 @@ class _DailyScreenState extends State<DailyScreen> {
                               Text('High : ${day.tempCH}°C',style: const TextStyle(color: Colors.white)),
                               Text('Low : ${day.tempCL}°C' ,style: const TextStyle(color: Colors.white)),
                               Text('${day.condition}' ,style: const TextStyle(color: Colors.white)),
-
                             ],
                           ),
                         ),
