@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:provider/provider.dart';
 import '../Model/DailyData.dart';
+import '../main.dart';
 import '../service/HoursService.dart';
 import '../service/ImageExist.dart';
 
 class DailyScreen extends StatefulWidget {
 
-  final city;
-  const DailyScreen({Key? key, required this.city}) : super(key: key);
+  const DailyScreen({Key? key}) : super(key: key);
 
   @override
   State<DailyScreen> createState() => _DailyScreenState();
@@ -28,7 +29,7 @@ class _DailyScreenState extends State<DailyScreen> {
   Future<void> getDaily() async {
     try {
       await Future.delayed(const Duration(milliseconds: 10));
-      final newDailyData = await hoursService.gethoursData(widget.city,'7' /* days */);
+      final newDailyData = await hoursService.gethoursData(Provider.of<PlaceProvider>(context, listen: false).getPlace(),'7' /* days */);
       setState(() {
         daysData = newDailyData.cast<DailyData>();
       });
@@ -67,6 +68,7 @@ class _DailyScreenState extends State<DailyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return LiquidPullToRefresh(
       onRefresh: refresh,
       backgroundColor: Colors.white30,
@@ -119,10 +121,10 @@ class _DailyScreenState extends State<DailyScreen> {
                         padding: const EdgeInsets.only(right: 5.0),
                         child: TestImage(assetImagePath: 'assets/${day.condition}.png',width: 80,height: 80),
                       ),
-
                     ],
                   ),
-                ),),
+                ),
+              ),
             );
           },
         ),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:provider/provider.dart';
 import '../Model/Hourly Data.dart';
+import '../main.dart';
 import '../service/HoursService.dart';
 import '../service/ImageExist.dart';
 
 class HoursScreen extends StatefulWidget {
-  final city;
 
-  const HoursScreen({Key? key, required this.city}) : super(key: key);
+  const HoursScreen({Key? key}) : super(key: key);
 
   @override
   State<HoursScreen> createState() => _HoursScreenState();
@@ -26,7 +27,7 @@ class _HoursScreenState extends State<HoursScreen> {
   Future<void> getWeather() async {
     try {
       await Future.delayed(const Duration(milliseconds: 10));
-      final newHoursData = await hoursService.gethoursData(widget.city,'1'/* days */);
+      final newHoursData = await hoursService.gethoursData(Provider.of<PlaceProvider>(context, listen: false).getPlace(),'1'/* days */);
       setState(() {
         hoursData = newHoursData.cast<HourlyData>();
       });
@@ -102,7 +103,8 @@ class _HoursScreenState extends State<HoursScreen> {
                           ],
                         ),
                       ),
-                    ));
+                    )
+                );
               },
             )
         )

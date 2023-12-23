@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'Mains/Second main.dart';
+import 'Second main.dart';
 import 'package:provider/provider.dart';
 
 void main() async{
@@ -15,6 +15,7 @@ void main() async{
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
@@ -39,4 +40,5 @@ class PlaceProvider extends ChangeNotifier{
   String getPlace(){
     return _Home.get(1) ?? 'Hebron PS';
   }
+
 }

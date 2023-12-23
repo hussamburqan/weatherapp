@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/Screens/PlacesScreen.dart';
 import 'package:weather_app/main.dart';
-import '../Model/Weather Data.dart';
-import '../Screens/DailyScreen.dart';
-import '../Screens/Drawer_Home.dart';
-import '../Screens/HoursScreen.dart';
-import '../Screens/MapScreen.dart';
-import '../service/WeatherService.dart';
-import '../Screens/HomeScreen.dart';
+import 'Model/Weather Data.dart';
+import 'Screens/DailyScreen.dart';
+import 'Screens/Drawer_Home.dart';
+import 'Screens/HoursScreen.dart';
+import 'Screens/MapScreen.dart';
+import 'service/WeatherService.dart';
+import 'Screens/HomeScreen.dart';
 
 class SecondMain extends StatefulWidget {
   const SecondMain({Key? key}) : super(key: key);

@@ -29,7 +29,6 @@ class HoursService {
         return list.map((e) => DailyData.fromJson(e)).toList();
       }
 
-
       else{
         throw Exception('Unable to get Weather');
       }

@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:provider/provider.dart';
 import '../Model/City Data.dart';
 import '../Model/Weather Data.dart';
+import '../main.dart';
 import '../service/ImageExist.dart';
 import '../service/WeatherService.dart';
 import 'DialogCity.dart';
 
 class PlacesScreen extends StatefulWidget {
-  final Function(String) onPlaceSelected;
   final Function(int) onPageSelected;
 
-  const PlacesScreen({Key? key, required this.onPlaceSelected, required this.onPageSelected}) : super(key: key);
+  const PlacesScreen({Key? key, required this.onPageSelected}) : super(key: key);
 
   @override
   _PlacesScreenState createState() => _PlacesScreenState();
@@ -25,16 +26,15 @@ class _PlacesScreenState extends State<PlacesScreen> {
   late final List<City> citiesList;
   late final TextEditingController _controller;
 
-
   @override
   void initState() {
     super.initState();
 
-    getdata();
+    getData();
     _controller = TextEditingController();
   }
 
-  Future<void> getdata() async {
+  Future<void> getData() async {
     final box = await Hive.box('Places');
     if(box.isEmpty){
       for(int i =0 ; i < City.citiesList.length ; i++){
@@ -65,9 +65,9 @@ class _PlacesScreenState extends State<PlacesScreen> {
       await Future.delayed(const Duration(milliseconds: 20));
 
       weather = (await weatherService.getWeatherData(city.city));
-
       city.tempc = weather?.temperatureC.toString() ?? 'N/A';
       city.condition = weather?.condition ?? 'N/A';
+
     } catch (e) {
       print('Error fetching weather data: $e');
     }
@@ -76,7 +76,7 @@ class _PlacesScreenState extends State<PlacesScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getdata(),
+      future: getData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done){
           return Scaffold(
@@ -110,7 +110,7 @@ class _PlacesScreenState extends State<PlacesScreen> {
                             child: Slidable(
                               child: GestureDetector(
                                 onTap: () {
-                                  widget.onPlaceSelected(city.city);
+                                  Provider.of<PlaceProvider>(context, listen: false).SetPlace(city.city);
                                   widget.onPageSelected(0);
                                 },
                                 child: Container(
@@ -144,7 +144,7 @@ class _PlacesScreenState extends State<PlacesScreen> {
                                                 Text('${city.tempc}°C',
                                                     style: const TextStyle(
                                                         color: Colors.white)),
-                                                Text(city.condition,
+                                                Text("${city.condition}",
                                                     style: const TextStyle(
                                                         color: Colors.white)),
                                               ],
