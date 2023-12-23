@@ -98,7 +98,6 @@ class _SecondMain extends State<SecondMain> {
                           return GestureDetector(
                             onTap: () {
                               setState(() {
-                                print(place);
                                 getWeather();
                               });
                             },
@@ -108,16 +107,16 @@ class _SecondMain extends State<SecondMain> {
                           );
                         } else if (_numberScreen == 1) {
                           try{
-                            return PlacesScreen(onPageSelected: (p0) {_onPageSelected(0);},onPlaceSelected: (selectedPlace) {
-                              context.read<PlaceProvider>().SetPlace(selectedPlace);
-                            });}catch(e){rethrow;
+                            return PlacesScreen(onPageSelected: (p0) {_onPageSelected(0);});
+                          }catch(e){
+                            rethrow;
                           }
                         }
                         else if (_numberScreen == 2 ){
-                          return DailyScreen(city: weather!.city);
+                          return DailyScreen();
                         }
                         else if(_numberScreen == 3 ){
-                          return HoursScreen(city: weather!.city);
+                          return HoursScreen();
                         }
                         else if(_numberScreen == 4){
                           return MapScreen(onPageSelected: (int) {
@@ -126,7 +125,7 @@ class _SecondMain extends State<SecondMain> {
                           });
 
                         }else {
-                          return  Center(child: Text('Place name error\n${context.watch<PlaceProvider>().getPlace()}',style: TextStyle(color: Colors.white,fontSize: 40),));
+                          return  Center(child: Text('Place name error\n${Provider.of<PlaceProvider>(context, listen: false).getPlace()}',style: TextStyle(color: Colors.white,fontSize: 40),));
                         }
                       }
                       else {
