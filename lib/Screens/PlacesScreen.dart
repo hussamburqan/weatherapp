@@ -44,6 +44,8 @@ class _PlacesScreenState extends State<PlacesScreen> {
       City.citiesList = [];
       for(int i =0 ; i < box.length ; i++){
         City.citiesList.add(City(
+            condition: '',
+            tempc: '',
             city: box.getAt(i)
         ));
       }
