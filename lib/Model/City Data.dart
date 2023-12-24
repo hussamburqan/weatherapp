@@ -6,6 +6,7 @@ class City {
   City({ this.condition,  this.tempc, required this.city});
 
   static List<City> citiesList = [
+
     City(
       city: 'Hebron Ps',
     ),
@@ -18,7 +19,6 @@ class City {
     City(
       city: 'London',
     ),
-
     City(
       city: 'Tokyo',
     ),
@@ -37,6 +37,7 @@ class City {
     City(
       city: 'Berlin',
     ),
+
   ];
 
 }
